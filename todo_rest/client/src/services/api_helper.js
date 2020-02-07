@@ -29,8 +29,6 @@ export const registerUser = async registerData => {
   }
 };
 
-export const putTodo = async () => {};
-
 // VERIFY USER
 export const verifyUser = () => {
   const token = localStorage.getItem("authToken");
@@ -47,5 +45,10 @@ export const indexTodos = async () => {
 //POST THE TODO
 export const postTodo = async postData => {
   const resp = await api.post("/todos", postData);
+  return resp.data;
+};
+
+export const putTodo = async (id, postData) => {
+  const resp = await api.put(`/todos/${id}`, postData);
   return resp.data;
 };

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
 export default class SingleTodo extends Component {
   constructor(props) {
@@ -34,6 +35,9 @@ export default class SingleTodo extends Component {
         {this.state.currentTodo && (
           <div>
             <h1>{this.state.currentTodo.title}</h1>
+            <Link to={`/todos/${this.state.currentTodo.id}/edit`}>
+              <button>edit</button>
+            </Link>
           </div>
         )}
       </div>
