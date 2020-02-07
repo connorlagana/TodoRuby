@@ -5,7 +5,7 @@ class User < ApplicationRecord
   # Model associations
   has_many :todos, foreign_key: :created_by
   # Validations
-  validates :name presence: true
+  validates :name, presence: true
   validates :email, uniqueness: true, presence: true
-  validates :password presence: true
+  validates :password_digest, presence: true
 end

@@ -24,10 +24,13 @@ export const registerUser = async registerData => {
   } catch (e) {
     console.log(e.response);
     if (e.response.status === 422) {
-      return { errorMessage: "emial is already in use" };
+      return { errorMessage: "email is already in use" };
     }
   }
 };
+
+export const putTodo = async () => {};
+
 // VERIFY USER
 export const verifyUser = () => {
   const token = localStorage.getItem("authToken");

@@ -13,21 +13,18 @@ export default class SingleTodo extends Component {
     const currentTodo = this.props.todos.find(
       todo => todo.id === parseInt(this.props.todoId)
     );
-
-    
-
     this.setState({
       currentTodo
     });
   };
 
   componentDidMount() {
-    this.setCurrentTodo()
+    this.setCurrentTodo();
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.todoId != this.props.todoId) {
-      this.setCurrentTodo()
+      this.setCurrentTodo();
     }
   }
 
@@ -36,10 +33,10 @@ export default class SingleTodo extends Component {
       <div>
         {this.state.currentTodo && (
           <div>
-            <h1>{currentTodo.title}</h1>  
+            <h1>{this.state.currentTodo.title}</h1>
           </div>
         )}
       </div>
-    )
+    );
   }
 }

@@ -13,6 +13,16 @@ class TodosController < ApplicationController
     json_response(@todo, :created)
   end
 
+  def login
+    @user = USer.find_by_email(params[:email])
+    if @user.authenticate(params[:password])
+      token = encode(id: @user.id, name: @user.name)
+      response = { auth_token: token, user: @user}
+      json_response(response)
+    else
+    end
+  end
+
   # GET /todos/:id
   def show
     json_response(@todo)

@@ -3,10 +3,12 @@ import {
   registerUser,
   verifyUser,
   indexTodos,
-  postTodo
+  postTodo,
+  loginUser
 } from "./services/api_helper";
 import RegisterForm from "./components/RegisterForm";
-import CreateTodoForm from "./components/CreateTodoForm";
+import LoginForm from "./components/LoginForm";
+import TodoContainer from "./components/TodoContainer.js";
 
 import { Route, Link, withRouter } from "react-router-dom";
 
@@ -24,12 +26,12 @@ class App extends Component {
   handleRegister = async (e, registerData) => {
     e.preventDefault();
     const currentUser = await registerUser(registerData);
+    console.log(this.state);
     if (!currentUser.errorMessage) {
       this.setState({ currentUser });
     } else {
       this.setState({ errorText: currentUser.errorMessage });
     }
-    this.setState({ currentUser });
   };
 
   handleLogout = () => {
@@ -41,9 +43,17 @@ class App extends Component {
     localStorage.removeItem("email");
   };
 
+  handleLogin = () => {
+    // this.setState({
+    //   currentUser: null
+    // });
+    // localStorage.removeItem("authToken");
+    // localStorage.removeItem("name");
+    // localStorage.removeItem("email");
+  };
+
   componentDidMount() {
     verifyUser();
-    this.readAllTodos();
     if (localStorage.getItem("authToken")) {
       const name = localStorage.getItem("name");
       const email = localStorage.getItem("email");
@@ -57,24 +67,31 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        {this.state.currentUser && (
+        {this.state.currentUser ? (
           <div>
             <h1>Hello, {this.state.currentUser.name}</h1>
-            <button onClick={this.handleLogout}>Logout!!</button>
+            <button onClick={this.handleLogout}>Logout</button>
           </div>
-          :
-          <Link to="/register"><button>register</button>></Link>
-        )
-        }
-        <Route />
-        <RegisterForm handleRegister={this.handleRegister} />
-        <CreateTodoForm createTodo={this.createTodo} />
-        {this.state.todos &&
-          this.state.todos.map(todo => (
-            <div key={todo.id}>
-              <h3>{todo.title}</h3>
-            </div>
-          ))}
+        ) : (
+          <nav>
+            <Link to="/register">
+              <button>Register</button>
+            </Link>
+            <Link to="/login">
+              <button>Register</button>
+            </Link>
+          </nav>
+        )}
+        <Route
+          path="/register"
+          render={() => (
+            <RegisterForm
+              handleRegister={this.handleRegister}
+              errorText={this.state.errorText}
+            />
+          )}
+        />
+        <Route path="/todos" render={() => <TodoContainer />} />
       </div>
     );
   }

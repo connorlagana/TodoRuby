@@ -1,9 +1,15 @@
 import React, { Component } from "react";
 import { Route, withRouter } from "react-router-dom";
-import { indexTodos, postTodo, verifyUser } from "../services/api_helper.js";
+import {
+  indexTodos,
+  postTodo,
+  putTodo,
+  verifyUser
+} from "../services/api_helper.js";
 import TodoList from "./TodoList.js";
 import SingleTodo from "./SingleTodo.js";
 import CreateTodoForm from "./CreateTodoForm";
+import UpdateTodoForm from "./UpdateTodoForm";
 
 export default class TodoContainer extends Component {
   constructor(props) {
@@ -21,7 +27,7 @@ export default class TodoContainer extends Component {
 
   // Read all todos
   readAllTodos = async () => {
-    const Todos = await indexTodos();
+    const todos = await indexTodos();
     this.setState({
       todos
     });
@@ -32,6 +38,18 @@ export default class TodoContainer extends Component {
     this.setState({
       todos: [...this.state.todos, newTodo]
     });
+  };
+
+  updateTodo = async (id, todosData) => {
+    const updateTodo = await putTodo(id, todosData);
+    const changedTodos = this.state.todos.map(todo =>
+      todo.id === parseInt(id) ? todosData : todo
+    );
+
+    this.setState({
+      todos: changedTodos
+    });
+    // this.props.params.history;
   };
 
   render() {
@@ -55,6 +73,16 @@ export default class TodoContainer extends Component {
         <Route
           path="/todos/new"
           render={() => <CreateTodoForm createTodo={this.createTodo} />}
+        />
+        <Route
+          path="/todos/:id/edit"
+          render={props => (
+            <UpdateTodoForm
+              todos={this.state.todos}
+              updateTodos={this.updateTodos}
+              todoId={props.match.params.id}
+            />
+          )}
         />
       </div>
     );
